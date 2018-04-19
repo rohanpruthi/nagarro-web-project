@@ -1,0 +1,183 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Express Shopping</title>
+    <link href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <!-- <h1>Hello,World!</h1> -->
+
+        <!-- productModal starts here -->
+        <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel">Add Product</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="productName">Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Product Name" v-model='productName' required>
+                            <div class="input-group-prepend">
+                                <label for="vendorName">Vendor</label>
+                            </div>
+                            <select class="custom-select" id="selectVendorId" v-model='productVendorId' required>
+                                <option selected>Choose Vendor</option>
+                                <option v-for='vendor in vendors' value="vendor.id">{{vendor.name}}</option>
+                                <!-- <option value="2">Two</option>
+                                <option value="3">Three</option> -->
+                            </select>
+                        </div>
+                        <label for="productPrice">Price</label>
+                        <input type="text" class="form-control" placeholder="Enter Price in Rupees" v-model='productPrice' required>
+                        <div class="alert alert-success show fade" role="alert" v-if="seenAlert1">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click='setSeenAlert1'>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <strong>Done!</strong> Product details has been saved.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" v-on:click="addProduct">Save Product</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Modal starts here -->
+
+        <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cartModalLabel">Cart</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Products</th>
+                                    <th>Quantity</th>
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for='item in cart'>
+                                    <td scope="row">{{item.productName}}</td>
+                                    <td>
+                                        <button type="btn" class="btn btn-sm" v-on:click="updateCart">-</button>{{item.quantity}}
+                                        <button type="btn" class="btn btn-sm" v-on:click="updateCart">+</button>
+                                    </td>
+                                    <td>50000</td>
+                                    <td>50000</td>
+                                </tr>
+                                <tr>
+                                    <th class="bg-light" colspan="3">Total</td>
+                                        <td class="bg-light">50000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- Nav bar starts here-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#" v-on:click="getAllProducts"><img src="./image/open.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                Express Shopping</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#productModal">Add Product</button>
+                    <button type="button" class="btn btn-outline-secondary mx-3" data-toggle="modal" data-target="#cartModal">View Cart</button>
+                </div>
+            </div>
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    Filter By Vendor
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <a class="dropdown-item" href="#" v-for="vendor in vendors" v-on:click="getProductsByVendor(vendor.id)">{{vendor.name}}</a>
+                </div>
+            </div>
+        </nav>
+        </br>
+        <div class="alert alert-success show fade" role="alert" id="cartAlert" v-if="seenAlert2">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="setSeenAlert2">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Thanks!</strong> Product has been added to cart.
+        </div>
+        <div class="row">
+            <div class="col-3 mx-4 my-2" v-for="product in products">
+                <div class="card">
+                    <div class="card-head bg-light">
+                        <a class="text-secondary mx-2 align-middle">{{ product.name }}</a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ product.name }}
+                        </h5>
+                        <div class="card-text">
+                            <p class="font-italic font-weight-light">By {{ product.vendorId }}</p>
+                        </div>
+                        <div class="card-text">
+                            <p>₹ {{ product.price }}</p>
+                        </div>
+                        <button class="btn btn-primary text-white" data-toggle="alert" data-target="#cartAlert" v-on:click="addToCart">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+        <nav class="navbar fixed-bottom bg-light"><p></p>
+            <p class="navbar-text font-weight-light mx-2">&lt/&gt with ❤ by
+                <strong class="font-italic">Rohan Pruthi</strong>
+            </p>
+        </nav>
+    </div>
+    <script src="app.js"></script>
+    <!-- ❣&amp☕ -->
+</body>
+
+</html>
