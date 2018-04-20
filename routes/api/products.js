@@ -2,7 +2,11 @@
 const route = require('express').Router()
 const db = require('../../db')
 route.get('/', (req, res) => {
-    db.Product.findAll()
+    db.Product.findAll({
+        include: [{
+            model: db.Vendor
+        }]
+    })
         .then((products) => {
             res.status(200).send(products)
         })
@@ -14,13 +18,15 @@ route.get('/', (req, res) => {
 })
 route.get('/:id', (req, res) => {
     db.Product.findAll({
-        where:{
-            vendorId : req.params.id
+        include: [{
+            model: db.Vendor
+        }],
+        where: {
+            vendorId: req.params.id
         }
+    }).then((products) => {
+        res.status(200).send(products)
     })
-        .then((products) => {
-            res.status(200).send(products)
-        })
         .catch((e) => {
             res.status(500).send({
                 error: "Could not retrieve Product(s)"

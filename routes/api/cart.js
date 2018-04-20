@@ -4,9 +4,13 @@ const route = require('express').Router()
 const db = require('../../db')
 
 route.get('/', (req, res) => {
-    db.Cart.findAll()
+    db.Cart.findAll({
+        include: [{
+            model: db.Product
+        }]
+    })
         .then((cart) => {
-            console.log(cart)
+            // console.log(cart)
             res.status(200).send(cart)
         })
         .catch((e) => {
@@ -29,7 +33,6 @@ route.post('/', (req, res) => {
     }).then((product) => {
         db.Cart.create({
             productId: product.id,
-            productName: product.name,
             quantity: 1
         })
     })
@@ -57,7 +60,7 @@ route.delete('/:id', (req, res) => {
 })
 
 route.put('/', (req, res) => {
-    if (req.body.s === 1) {
+    if (req.body.sign == 1) {
         db.Cart.increment('quantity', {
             where: {
                 id: req.body.id
@@ -67,17 +70,28 @@ route.put('/', (req, res) => {
                 res.status(500).send({ error: "Could not update Cart Product" })
             })
     }
-    else {
-        console.log("decrement",req.body.s);
-        db.Cart.decrement('quantity', {
-            where: {
-                id: req.body.id
-            }
-        })
-            .catch((e) => {
+    if (req.body.sign == -1) {
+        db.Cart.findById(req.body.id)
+            .then((cart) => {
+                if (cart.quantity == 1) {
+                    db.Cart.destroy({
+                        where: {
+                            id: req.body.id
+                        }
+                    })
+                }
+                else {
+                    db.Cart.decrement('quantity', {
+                        where: {
+                            id: req.body.id
+                        }
+                    })
+                }
+            }).catch((e) => {
                 res.status(500).send({ error: "Could not update Cart Product" })
             })
     }
+    res.status(500).send({ error: "Bad request" })
 })
 
 exports = module.exports = route

@@ -5,7 +5,6 @@ const db = new Sequelize('ngrwssb', 'ngrusr', 'ngrpass', {
     host: 'localhost',
     storage: './webassn.db'
 })
-//db.authenticate().then(() => console.log("Success"))
 const Product = db.define('product', {
     id: {
         type: Sequelize.INTEGER,
@@ -22,9 +21,9 @@ const Product = db.define('product', {
         allowNull: false,
         defaultValue: 0.0
     },
-    vendorId: {
-        type: Sequelize.INTEGER
-    }
+    // vendorId: {
+    //     type: Sequelize.INTEGER
+    // }
 
 })
 const Vendor = db.define('vendor', {
@@ -39,8 +38,7 @@ const Vendor = db.define('vendor', {
         allowNull: false
     },
 })
-//Product.hasMany(Vendor)
-Vendor.belongsTo(Product)
+Product.belongsTo(Vendor)
 
 const Cart = db.define('cart', {
     id: {
@@ -49,14 +47,14 @@ const Cart = db.define('cart', {
         allowNull: false,
         primaryKey: true
     },
-    productId: {
-        type:Sequelize.INTEGER,
-        allowNull:false
-    },
-    productName: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
+    // productId: {
+    //     type:Sequelize.INTEGER,
+    //     allowNull:false
+    // },
+    // productName: {
+    //     type: Sequelize.STRING,
+    //     allowNull: false
+    // },
     quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,

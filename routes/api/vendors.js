@@ -15,7 +15,6 @@ route.get('/', (req, res) => {
 })
 
 route.post('/', (req, res) => {
-     console.log("asdd")
     db.Vendor.create({
         name: req.body.name,
     })

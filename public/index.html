@@ -87,17 +87,17 @@
                             </thead>
                             <tbody>
                                 <tr v-for='item in cart'>
-                                    <td scope="row">{{item.productName}}</td>
-                                    <td>
+                                    <td scope="row">{{item.product.name}}</td>
+                                    <td v-model="cartQuantity">
                                         <button type="btn" class="btn btn-sm" v-on:click="updateCartDecrement" v-bind:id="item.id">-</button>{{item.quantity}}
                                         <button type="btn" class="btn btn-sm" v-on:click="updateCartIncrement" v-bind:id="item.id">+</button>
                                     </td>
-                                    <td></td>
-                                    <td></td>
+                                    <td v-model="cartPrice">{{item.product.price}}</td>
+                                    <td v-model>{{amount}}</td>
                                 </tr>
                                 <tr>
                                     <th class="bg-light" colspan="3">Total</td>
-                                        <td class="bg-light"></td>
+                                        <td class="bg-light">{{total}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -119,7 +119,7 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#productModal">Add Product</button>
-                    <button type="button" class="btn btn-outline-secondary mx-3" data-toggle="modal" data-target="#cartModal">View Cart</button>
+                    <button type="button" class="btn btn-outline-secondary mx-3" data-toggle="modal" data-target="#cartModal" v-on:click="getCart">View Cart</button>
                 </div>
             </div>
             <div class="btn-group" role="group">
@@ -150,7 +150,7 @@
                             {{ product.name }}
                         </h5>
                         <div class="card-text">
-                            <p class="font-italic font-weight-light">By {{ product.vendorId }}</p>
+                            <p class="font-italic font-weight-light">By {{ product.vendor.name }}</p>
                         </div>
                         <div class="card-text">
                             <p>₹ {{ product.price }}</p>

@@ -3,38 +3,25 @@ const vm = new Vue({
     el: '#app',
     data: function () {
         return {
-            products: [
-                {
-                    name: 'Pixel 2 XL',
-                    vendorId: '1',
-                    price: 50000
-
-                }
-            ],
+            products: [],
             productName: '',
             productPrice: null,
-            productVendorId: 0, //()=>getAllVendors()
-            vendors: [
-                {
-                    name: 'Google',
-                    id: 1
-                }
-            ],
-            vendorName: '',
-            cart: [
-                {
-                    productId: 1,
-                    productName: 'Pixel 2 XL',
-                    quantity: 1,
-                    // price: products[productId].price
-                }
-            ],
-            cartProductId: 0,
-            cartProductName: '',
-            cartQuantity: 0,
+            productVendorId: null,
+            vendors: [],
+            // vendorName: '',
+            cart: [],
+            // cartProductId: 0,
+            cartPrice: '',
+            cartQuantity: '',
             seenAlert1: false,
             seenAlert2: false
         }
+    },
+    computed:{
+        amount: function(){
+            return parseInt(this.cartQuantity) * parseFloat(this.cartPrice)
+        },
+        total: function(){}
     },
     mounted() {
         axios.get('http://localhost:7000/api/products')
@@ -55,6 +42,7 @@ const vm = new Vue({
 
     },
     methods: {
+        //methods for products
         getAllProducts() {
             axios.get('http://localhost:7000/api/products')
                 .then(res => {
@@ -63,7 +51,6 @@ const vm = new Vue({
                 .catch(e => { console.log(e) })
         },
         getProductsByVendor(e) {
-            // console.log(e.target.id)
             let id = e.target.id
             axios.get('http://localhost:7000/api/products/' + id)
                 .then(res => {
@@ -90,10 +77,16 @@ const vm = new Vue({
                     .catch(e => { console.log(e) })
             }
         },
+        //methods for cart
+        getCart(){
+            axios.get('http://localhost:7000/api/cart')
+            .then(res => {
+                this.cart = res.data
+            })
+        },
         addToCart(e) {
             let id = e.target.id
             axios.post('http://localhost:7000/api/cart/', { productId: id })
-
             axios.get('http://localhost:7000/api/cart')
                 .then(res => {
                     this.cart = res.data
@@ -102,54 +95,32 @@ const vm = new Vue({
         },
         updateCartDecrement(e) {
             let cartId = e.target.id
-            console.log("asasa",cartId)
-            for (let i = 0; i < this.cart.length; i++) {
-
-                if (this.cart[i].id == cartId) {
-                    if (this.cart[i].quantity   == 1) {
-                        axios.delete('http://localhost:7000/api/cart/' + cart[i].id)
-                        axios.get('http://localhost:7000/api/cart')
-                            .then(res => {
-                                this.cart = res.data
-                            })
-                        break;    
-                    }
-                    
-                    else {
-                        s = -1
-                        console.log(s)
-                        axios.put('http://localhost:7000/api/cart', { id: this.cart[i].id, s })
-                        axios.get('http://localhost:7000/api/cart')
-                            .then(res => {
-                                this.cart = res.data
-                            })
-                        break;    
-                    }
-                }
-            }
-
+            let sign = -1
+            axios.put('http://localhost:7000/api/cart', { id: cartId, sign })
+            axios.get('http://localhost:7000/api/cart')
+                .then(res => {
+                    this.cart = res.data
+                })
         },
 
         updateCartIncrement(e) {
             let cartId = e.target.id
-            console.log("saasa",cartId)
-            // for (let i = 0; i < this.cart.length; i++) {
-            //     if(this.cart[i].id===cartId)
-                s = 1
-                axios.put('http://localhost:7000/api/cart', { id: cartId, s })
-                axios.get('http://localhost:7000/api/cart')
-                    .then(res => {
-                        this.cart = res.data
-                    })
+            let sign = 1
+            axios.put('http://localhost:7000/api/cart', { id: cartId, sign })
+            axios.get('http://localhost:7000/api/cart')
+                .then(res => {
+                    this.cart = res.data
+                })
 
-            }
-        },    
+        },
+        //miscellaneous 
+        setSeenAlert1() {
+            this.seenAlert1 = false
+        },
+        setSeenAlert2() {
+            this.seenAlert2 = false
+        }
 
-    setSeenAlert1() {
-        this.seenAlert1 = false
     },
-    setSeenAlert2() {
-        this.seenAlert2 = false
-    }
 
 })
