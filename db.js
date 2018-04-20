@@ -40,7 +40,7 @@ const Vendor = db.define('vendor', {
     },
 })
 //Product.hasMany(Vendor)
-//Vendor.belongsTo(Product)
+Vendor.belongsTo(Product)
 
 const Cart = db.define('cart', {
     id: {
@@ -63,6 +63,9 @@ const Cart = db.define('cart', {
         defaultValue: 0
     }
 })
+
+Cart.belongsTo(Product)
+
 db.sync().then(() => console.log("Database has been updated"))
     .catch((err) => console.error("Error updating database"))
 

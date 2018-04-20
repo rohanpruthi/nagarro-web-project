@@ -42,7 +42,7 @@
                             </div>
                             <select class="custom-select" id="selectVendorId" v-model='productVendorId' required>
                                 <option selected>Choose Vendor</option>
-                                <option v-for='vendor in vendors' value="vendor.id">{{vendor.name}}</option>
+                                <option v-for='vendor in vendors' v-bind:value="vendor.id">{{vendor.name}}</option>
                                 <!-- <option value="2">Two</option>
                                 <option value="3">Three</option> -->
                             </select>
@@ -89,15 +89,15 @@
                                 <tr v-for='item in cart'>
                                     <td scope="row">{{item.productName}}</td>
                                     <td>
-                                        <button type="btn" class="btn btn-sm" v-on:click="updateCart">-</button>{{item.quantity}}
-                                        <button type="btn" class="btn btn-sm" v-on:click="updateCart">+</button>
+                                        <button type="btn" class="btn btn-sm" v-on:click="updateCartDecrement" v-bind:id="item.id">-</button>{{item.quantity}}
+                                        <button type="btn" class="btn btn-sm" v-on:click="updateCartIncrement" v-bind:id="item.id">+</button>
                                     </td>
-                                    <td>50000</td>
-                                    <td>50000</td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <th class="bg-light" colspan="3">Total</td>
-                                        <td class="bg-light">50000</td>
+                                        <td class="bg-light"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -128,7 +128,7 @@
                     Filter By Vendor
                 </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                    <a class="dropdown-item" href="#" v-for="vendor in vendors" v-on:click="getProductsByVendor(vendor.id)">{{vendor.name}}</a>
+                    <a class="dropdown-item" href=# v-for="vendor in vendors" v-on:click="getProductsByVendor" v-bind:id="vendor.id">{{vendor.name}}</a>
                 </div>
             </div>
         </nav>
@@ -155,7 +155,7 @@
                         <div class="card-text">
                             <p>₹ {{ product.price }}</p>
                         </div>
-                        <button class="btn btn-primary text-white" data-toggle="alert" data-target="#cartAlert" v-on:click="addToCart">Add to Cart</button>
+                        <button class="btn btn-primary text-white" data-toggle="alert" data-target="#cartAlert" v-on:click="addToCart" v-bind:id="product.id">Add to Cart</button>
                     </div>
                 </div>
             </div>

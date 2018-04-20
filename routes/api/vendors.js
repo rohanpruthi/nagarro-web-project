@@ -1,8 +1,9 @@
-const Vendor = require('../../db').Vendor
+// const Vendor = require('../../db').Vendor
+const db = require('../../db')
 const route = require('express').Router()
 
 route.get('/', (req, res) => {
-    Vendor.findAll()
+    db.Vendor.findAll()
         .then((vendor) => {
             res.status(200).send(vendor)
         })
@@ -14,7 +15,8 @@ route.get('/', (req, res) => {
 })
 
 route.post('/', (req, res) => {
-    Vendor.create({
+     console.log("asdd")
+    db.Vendor.create({
         name: req.body.name,
     })
         .then((vendor) => {

@@ -1,8 +1,8 @@
-const Product = require('../../db').Product
+// const Product = require('../../db').Product
 const route = require('express').Router()
-
+const db = require('../../db')
 route.get('/', (req, res) => {
-    Product.findAll()
+    db.Product.findAll()
         .then((products) => {
             res.status(200).send(products)
         })
@@ -13,7 +13,7 @@ route.get('/', (req, res) => {
         })
 })
 route.get('/:id', (req, res) => {
-    Product.findAll({
+    db.Product.findAll({
         where:{
             vendorId : req.params.id
         }
@@ -34,7 +34,7 @@ route.post('/', (req, res) => {
     //         error: "Price is not a valid number"
     //     })
     // }
-    Product.create({
+    db.Product.create({
         name: req.body.name,
         vendorId: req.body.vendorId,
         price: parseFloat(req.body.price)
