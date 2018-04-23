@@ -1,12 +1,13 @@
 const route = require('express').Router()
-// const Cart = require('../../db').Cart
-// const Product = require('../../db').Product
+const session = require('express-session')
+const passport = require('./passport')
 const db = require('../../db')
 
 route.get('/', (req, res) => {
     db.Cart.findAll({
         include: [{
-            model: db.Product
+            model: db.Product,
+            model: db.User
         }]
     })
         .then((cart) => {

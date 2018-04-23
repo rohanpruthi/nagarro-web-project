@@ -14,14 +14,17 @@ const vm = new Vue({
             cartPrice: '',
             cartQuantity: '',
             seenAlert1: false,
-            seenAlert2: false
+            seenAlert2: false,
+            loggedIn: false,
+            user: [],
+            currentUsername: 'guest',
         }
     },
-    computed:{
-        amount: function(){
+    computed: {
+        amount: function () {
             return parseInt(this.cartQuantity) * parseFloat(this.cartPrice)
         },
-        total: function(){}
+        total: function () { }
     },
     mounted() {
         axios.get('http://localhost:7000/api/products')
@@ -78,11 +81,11 @@ const vm = new Vue({
             }
         },
         //methods for cart
-        getCart(){
+        getCart() {
             axios.get('http://localhost:7000/api/cart')
-            .then(res => {
-                this.cart = res.data
-            })
+                .then(res => {
+                    this.cart = res.data
+                })
         },
         addToCart(e) {
             let id = e.target.id
@@ -112,6 +115,15 @@ const vm = new Vue({
                     this.cart = res.data
                 })
 
+        },
+        //user menthods
+        logIn() {
+            console.log("login method")
+            this.loggedIn = true
+        },
+
+        signUp() {
+            console.log("sign up method")
         },
         //miscellaneous 
         setSeenAlert1() {

@@ -62,11 +62,30 @@ const Cart = db.define('cart', {
     }
 })
 
+const User = db.define('user', {
+    id: {
+        type: sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    username: {
+        type: sequelize.STRING,
+        unique: true,
+        allowNull: false,
+    },
+    password: {
+        type: sequelize.STRING,
+        allowNull: false
+    }
+})
+
 Cart.belongsTo(Product)
+Cart.belongsTo(User)
 
 db.sync().then(() => console.log("Database has been updated"))
     .catch((err) => console.error("Error updating database"))
 
 exports = module.exports = {
-    Product, Vendor, Cart
+    Product, Vendor, Cart, User, db
 }
