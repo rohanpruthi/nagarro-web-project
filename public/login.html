@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="./image/open.png">
+    <title>Log In • Express Shopping</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="./signin.css">
+</head>
+
+<body>
+    <div></div>
+    <div id="app" class="text-center">
+        <form class="form-signin">
+            <img class="mb-4" src="./image/open.png" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Please Log In</h1>
+            <label for="inputEmail" class="sr-only">Username</label>
+            <input type="email" id="inputEmail" class="form-control" placeholder="Username" required>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+            <br/>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" v-on:click="logIn">Log In</button>
+        </form>
+
+        <script src="app.js"></script>
+        <!-- </div> -->
+</body>
+
+</html>
