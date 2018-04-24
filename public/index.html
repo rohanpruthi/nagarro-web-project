@@ -89,12 +89,12 @@
                             <tbody>
                                 <tr v-for='item in cart'>
                                     <td scope="row">{{item.product.name}}</td>
-                                    <td v-model="cartQuantity">
+                                    <td >
                                         <button type="btn" class="btn btn-sm" v-on:click="updateCartDecrement" v-bind:id="item.id">-</button>{{item.quantity}}
                                         <button type="btn" class="btn btn-sm" v-on:click="updateCartIncrement" v-bind:id="item.id">+</button>
                                     </td>
-                                    <td v-model="cartPrice">{{item.product.price}}</td>
-                                    <td v-model>{{amount}}</td>
+                                    <td>{{item.product.price}}</td>
+                                    <td>{{amount}}</td>
                                 </tr>
                                 <tr>
                                     <th class="bg-light" colspan="3">Total</td>

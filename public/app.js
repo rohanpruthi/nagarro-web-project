@@ -17,7 +17,7 @@ const vm = new Vue({
             seenAlert2: false,
             loggedIn: false,
             user: [],
-            currentUsername: 'guest',
+            currentUsername: '',
         }
     },
     computed: {
@@ -119,11 +119,23 @@ const vm = new Vue({
         //user menthods
         logIn() {
             console.log("login method")
+            axios.post('http://localhost:7000/api/users/login')
+            axios.get('http://localhost:7000/api/users')
+                .then(res => {
+                    this.currentUsername = res.data
+                })
             this.loggedIn = true
+
+            // console.log(this.currentUsername)
+
         },
 
         signUp() {
             console.log("sign up method")
+            axios.post('http://localhost:7000/api/users/signup')
+            // .then(res=>{
+            //     this.user=res.data
+            // })
         },
         //miscellaneous 
         setSeenAlert1() {
@@ -133,6 +145,6 @@ const vm = new Vue({
             this.seenAlert2 = false
         }
 
-    },
+    }
 
 })

@@ -64,18 +64,18 @@ const Cart = db.define('cart', {
 
 const User = db.define('user', {
     id: {
-        type: sequelize.INTEGER,
+        type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
     username: {
-        type: sequelize.STRING,
+        type: Sequelize.STRING,
         unique: true,
         allowNull: false,
     },
     password: {
-        type: sequelize.STRING,
+        type: Sequelize.STRING,
         allowNull: false
     }
 })

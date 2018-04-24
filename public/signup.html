@@ -10,18 +10,20 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
     <link rel="stylesheet" href="./signin.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
     <div></div>
     <div id="app" class="text-center">
-        <form class="form-signin">
+        <form class="form-signin" action="/api/users/signup" method="post">
             <img class="mb-4" src="./image/open.png" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Sign Up Here</h1>
             <label for="inputEmail" class="sr-only">Username</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Username" required>
+            <input type="text" id="inputEmail" class="form-control" placeholder="Username" name="username" required>
             <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
             <br/>
             <button class="btn btn-lg btn-primary btn-block" type="submit" v-on:click="signUp">Sign Up</button>
         </form>
