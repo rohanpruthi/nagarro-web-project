@@ -3,7 +3,10 @@ const session = require('express-session')
 const passport = require('../../passport')
 const db = require('../../db')
 
+
+//get all products from cart for corresponding user Id
 route.get('/', (req, res) => {
+    // console.log("asdasd",req.user.username)
     if (req.user) {
         db.Cart.findAll({
             include: [{
@@ -11,7 +14,7 @@ route.get('/', (req, res) => {
                 model: db.User
             }],
             where: {
-                userId: req.body.id
+                userId: req.user.id
             }
         })
             .then((cart) => {
@@ -24,11 +27,12 @@ route.get('/', (req, res) => {
                 })
             })
     }
-    else {
-        res.send("Please Login First!")
-    }
+    // else {
+    //     res.send("Please Login First!")
+    // }
 })
 
+//adds product to cart
 route.post('/', (req, res) => {
     // if (isNaN(req.body.quantity) && isNaN(req.body.productId)) {
     //     return res.status(403).send({
@@ -57,22 +61,22 @@ route.post('/', (req, res) => {
             })
     }
     else {
-        res.redirect('login.html')
+        res.redirect('/index.html')
     }
 })
 
 route.delete('/:id', (req, res) => {
-    if(req.user){
-    db.Cart.destroy({
-        where: {
-            id: req.params.id
-        }
-    })
-        .catch((e) => {
-            res.status(500).send({
-                error: ("Could not delete cart item")
-            })
+    if (req.user) {
+        db.Cart.destroy({
+            where: {
+                id: req.params.id
+            }
         })
+            .catch((e) => {
+                res.status(500).send({
+                    error: ("Could not delete cart item")
+                })
+            })
     }
 })
 
@@ -111,9 +115,40 @@ route.put('/', (req, res) => {
         }
         res.status(500).send({ error: "Bad request" })
     }
-    else {
-        res.send("Please Login First!")
-    }
+    // else {
+    //     res.send("Please Login First!")
+    // }
 })
+
+// route.post('/add',(req,res)=>{
+//     if(req.user){
+//     db.Product.find({
+//         where:{
+//             id:req.body.productId
+//         }
+//     }).then((product)=>{
+//         db.Cart.findOrCreate({
+//             where:{
+//                 productId : product.id
+//             },
+//             defaults:{
+//                 productId: product.id,
+//                 quantity: 1,
+//                 userId: req.user.id
+//             }
+//         })
+//     })
+// }
+
+// })
+
+
+
+
+
+
+
+
+
 
 exports = module.exports = route

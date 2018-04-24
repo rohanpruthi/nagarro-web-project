@@ -2,6 +2,7 @@
 const vm = new Vue({
     el: '#app',
     data: function () {
+        //let loggedIn = localStorage.getItem('loggedIn') || false
         return {
             products: [],
             productName: '',
@@ -17,14 +18,25 @@ const vm = new Vue({
             seenAlert2: false,
             loggedIn: false,
             user: [],
-            currentUsername: '',
+            currentUsername: ''
         }
     },
     computed: {
-        amount: function () {
-            return parseInt(this.cartQuantity) * parseFloat(this.cartPrice)
-        },
-        total: function () { }
+        amount: function () {},
+        //     let temp = []
+        //     foreach(item in this.cart)
+        //     {
+        //         temp.append(parseFloat(item.product.price * item.quantity))
+        //     }
+        //     return temp
+        // },
+        total: function () {}
+        //     let temp = 0 
+        //     foreach(item in this.cart)
+        //     {
+        //         temp+=parseFloat(item.product.price * item.quantity) 
+        //     }
+        //  }
     },
     mounted() {
         axios.get('http://localhost:7000/api/products')
@@ -39,9 +51,15 @@ const vm = new Vue({
             .catch(e => { console.log(e) })
         axios.get('http://localhost:7000/api/cart')
             .then(res => {
+                console.log(res.data)
                 this.cart = res.data
             })
             .catch(e => { console.log(e) })
+        axios.get('http://localhost:7000/api/users')
+            .then(res=>{
+                this.currentUsername = res.data.username
+                this.loggedIn = true
+            })    
 
     },
     methods: {
@@ -117,25 +135,33 @@ const vm = new Vue({
 
         },
         //user menthods
-        logIn() {
-            console.log("login method")
-            axios.post('http://localhost:7000/api/users/login')
-            axios.get('http://localhost:7000/api/users')
-                .then(res => {
-                    this.currentUsername = res.data
-                })
-            this.loggedIn = true
+        // logIn() {
+        //     console.log("login method")
+            
+        //             }
+        //         })
+        //     // axios.get('http://localhost:7000/api/users')
+        //     //     .then(res => {
+        //     //         this.currentUsername = res.data
+        //     //     })
+        //     // console.log(this.currentUsername)
+        // },
 
-            // console.log(this.currentUsername)
-
-        },
-
-        signUp() {
-            console.log("sign up method")
-            axios.post('http://localhost:7000/api/users/signup')
-            // .then(res=>{
-            //     this.user=res.data
-            // })
+        // signUp() {
+        //     console.log("sign up method")
+        //     axios.post('http://localhost:7000/api/users/signup')
+        //     // .then(res=>{
+        //     //     this.user=res.data
+        //     // })
+        // },
+        logout(){
+            axios.get('http://localhost:7000/api/users/logout')
+            .then(res=>{
+                if(res.data.success){
+                    this.loggedIn=false
+                    window.location.href="http://localhost:7000"
+                }
+            })
         },
         //miscellaneous 
         setSeenAlert1() {

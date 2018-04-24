@@ -11,13 +11,13 @@ route.post('/signup', (req, res) => {
         password: req.body.password
     }).then((user) => {
         if (user) {
-            res.redirect('/login.html')
+            res.send(user)
         }
     }).catch((err) => res.send(err))
 })
 
 route.post('/login', passport.authenticate('local', {
-    failureRedirect: '/login.html',
+    failureRedirect: '/index.html',
     successRedirect: '/index.html'
 }))
 
@@ -25,11 +25,18 @@ route.get('/', (req, res) => {
 
     console.log(req.user)
     if (req.user) {
-        res.json(req.user.username)
+        res.json(req.user)
     } 
-    //else {
+    // else {
     //     res.send("YOU ARE NOT LOGGED IN")
     // }
+})
+route.get('/logout',(req,res)=>{
+    req.session.destroy(function(err){
+        res.send({
+            success:true
+        })
+    })
 })
 
 exports = module.exports = route
